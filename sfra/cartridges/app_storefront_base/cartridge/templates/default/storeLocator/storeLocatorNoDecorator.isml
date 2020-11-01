@@ -8,9 +8,9 @@
 
         <div class="${pdict.horizontalView === 'true' ? 'col-sm-6' : 'col-sm-12'}">
             <div class="card results-card">
-                <div class="card-header">
+                <iscomment> <div class="card-header">
                     <isinclude template="storeLocator/storeLocatorRadius" />
-                </div>
+                </div> </iscomment>
                 <div class="card-body">
                     <p class="text-center store-locator-no-results">${Resource.msg('error.no.results','storeLocator',null)}</p>
 

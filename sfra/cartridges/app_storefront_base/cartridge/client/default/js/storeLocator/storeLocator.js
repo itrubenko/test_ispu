@@ -1,5 +1,6 @@
 /* globals google */
 'use strict';
+var scrollAnimate = require('base/components/scrollAnimate');
 
 /**
  * appends params to a url
@@ -132,16 +133,84 @@ function search(element) {
     var payload = $form.is('form') ? $form.serialize() : { postalCode: $form.find('[name="postalCode"]').val() };
 
     url = appendToUrl(url, urlParams);
-
+    var map;
     $.ajax({
         url: url,
         type: $form.attr('method'),
         data: payload,
         dataType: 'json',
         success: function (data) {
+            // =========================
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 55.666, lng: 12.57 },
+                zoom: 13,
+            });
+            window.markers = [];
+            window.infoWindows = [];
+            data.stores.forEach(function (store) {
+                var div = document.createElement('div');
+                div.id = store.id;
+                div.innerHTML = store.id;
+                $('.stores').append(div);
+                var location = { lat: store.latitude, lng: store.longitude };
+                addMarker(location, map, store);
+            })
+
+
+
+            // Adds a marker to the map.
+            function addMarker(location, map, store) {
+                // Add the marker at the clicked location, and add the next-available label
+                // from the array of alphabetical characters.
+                var marker = new google.maps.Marker({
+                    position: location,
+                    map: map,
+                    title: store.name,
+                    id : store.id
+                });
+
+                var infowindow = new google.maps.InfoWindow({
+                    content: store.name,
+                });
+                infoWindows.push(infowindow);
+                marker.addListener("click", function(data) {
+                    // event.preventDefault();
+                    // console.log(data);
+                    $('.js-store input').prop('checked', false);
+                    var selectedStoreId = '#' + this.id;
+                    if (!$('#checkout-main').length) {
+                        $(selectedStoreId).get(0).scrollIntoView();
+                    }
+                    $(selectedStoreId).find('input').prop('checked', true);
+
+                    $('.select-store').prop('disabled', false);
+                });
+
+                marker.addListener("click", () => {
+                    // clean animation
+                    markers.forEach(function(marker) {
+                        marker.setAnimation(null);
+                    });
+
+                    infoWindows.forEach(function(infowindow) {
+                        infowindow.close();
+                    });
+
+
+                    infowindow.open(map, marker);
+                    marker.setAnimation(google.maps.Animation.BOUNCE);
+                });
+                markers.push(marker);
+            }
+
+            // =========================
+
             spinner.stop();
             updateStoresResults(data);
             $('.select-store').prop('disabled', true);
+        },
+        error : function() {
+            spinner.start();
         }
     });
     return false;
@@ -247,6 +316,7 @@ module.exports = {
             var selectedStore = $(':checked', '.results-card .results');
             var data = {
                 storeID: selectedStore.val(),
+                storeInfo: selectedStore.data('store-info'),
                 searchRadius: $('#radius').val(),
                 searchPostalCode: $('.results').data('search-key').postalCode,
                 storeDetailsHtml: selectedStore.siblings('label').find('.store-details').html(),
@@ -258,6 +328,8 @@ module.exports = {
     },
     updateSelectStoreButton: function () {
         $('body').on('change', '.select-store-input', (function () {
+            var markerId = $(this).data('marker');
+            google.maps.event.trigger(window.markers[markerId],'click');
             $('.select-store').prop('disabled', false);
         }));
     }

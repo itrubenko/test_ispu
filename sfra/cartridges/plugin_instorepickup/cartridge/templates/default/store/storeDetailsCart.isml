@@ -1,0 +1,12 @@
+<isset name="store" value="${pdict}" scope="page"/>
+<div class="store-details" data-store-id="${store.id}">
+    <div class="store-name">${store.name}</div>
+    <address>
+            ${store.address}
+            ${store.city},
+            ${store.postalCode}
+        <div class="store-hours">
+            <isprint value="${store.openingHoursEnglish}" encoding="off"/>
+        </div>
+    </address>
+</div>

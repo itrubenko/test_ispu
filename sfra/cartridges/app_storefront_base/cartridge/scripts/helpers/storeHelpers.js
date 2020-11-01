@@ -17,7 +17,7 @@ function getStores(radius, postalCode, lat, long, geolocation, showMap, url) {
     var Site = require('dw/system/Site');
     var URLUtils = require('dw/web/URLUtils');
 
-    var countryCode = geolocation.countryCode;
+    var countryCode = 'US';
     var distanceUnit = countryCode === 'US' ? 'mi' : 'km';
     var resolvedRadius = radius ? parseInt(radius, 10) : 15;
 

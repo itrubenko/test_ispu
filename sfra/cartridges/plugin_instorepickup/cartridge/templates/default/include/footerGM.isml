@@ -1,0 +1,50 @@
+    <script>
+        let map;
+        function initMap() { console.log('initialized')};
+        function initMap1() {
+            console.log('asda');
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 55.666, lng: 12.57 },
+                zoom: 13,
+            });
+            // document.que
+
+            // data.pickupPoint.forEach(function (store) {
+            //     var div = document.createElement('div');
+            //     div.id = store.id;
+            //     div.innerHTML = store.id;
+            //     document.querySelector('.stores').append(div);
+            //     var location = { lat: store.latitude, lng: store.longitude };
+            //     var label = store.name;
+            //     // addMarker(location, map, store);
+            // });
+
+
+            // Adds a marker to the map.
+            function addMarker(location, map, store) {
+                // Add the marker at the clicked location, and add the next-available label
+                // from the array of alphabetical characters.
+                var marker = new google.maps.Marker({
+                    position: location,
+                    label: store.name,
+                    map: map,
+                    title: store.name,
+                    id : store.id
+                });
+                const infowindow = new google.maps.InfoWindow({
+                    content: '<div>Test info</div>',
+                });
+
+                marker.addListener("click", function(data) {
+                    console.log(data);
+                });
+
+                marker.addListener("click", () => {
+                    infowindow.open(map, marker);
+                });
+            }
+        }
+
+    </script>
+
+    <iscomment> <div id="map" style="height: 100%"></div> </iscomment>
