@@ -6,7 +6,9 @@ server.extend(module.superModule);
 server.prepend('SubmitShipping', function (req, res, next) {
     var BasketMgr = require('dw/order/BasketMgr');
     var ShippingHelper = require('*/cartridge/scripts/checkout/shippingHelpers');
-
+    var collections = require('*/cartridge/scripts/util/collections');
+    var Transaction = require('dw/system/Transaction');
+    var Encoding = require('dw/crypto/Encoding');
     var currentBasket = BasketMgr.getCurrentBasket();
     var shipmentUUID = req.querystring.shipmentUUID || req.form.shipmentUUID;
     var shipment;
@@ -17,10 +19,25 @@ server.prepend('SubmitShipping', function (req, res, next) {
         shipment = currentBasket.defaultShipment;
     }
 
+    if (req.form.storeId) {
+        collections.forEach(currentBasket.getAllProductLineItems(), function (productLineItem) {
+            Transaction.wrap(function () {
+                if (productLineItem.custom.fromStoreId) {
+                    productLineItem.custom.fromStoreId = req.form.storeId;
+                    productLineItem.custom.storeInfo =  Encoding.fromURI(req.form.storeInfo);
+                }
+            });
+        });
+    }
+
     /* eslint-disable no-shadow */
     // eslint-disable-next-line no-unused-vars
     this.on('route:BeforeComplete', function (req, res) {
-        ShippingHelper.markShipmentForShipping(shipment);
+        if (req.form.storeId) {
+            ShippingHelper.markShipmentForPickup(shipment, req.form.storeId);
+        } else {
+            ShippingHelper.markShipmentForShipping(shipment);
+        }
     }, this);
     /* eslint-enable no-shadow */
 

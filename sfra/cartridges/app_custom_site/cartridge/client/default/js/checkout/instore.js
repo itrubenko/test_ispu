@@ -4,6 +4,19 @@ var storeLocator = require('base/storeLocator/storeLocator');
 var ENTER_KEY = 13;
 
 /**
+ * Filter values
+ * @param {Object} store - store object
+ * @returns {Object} filteredStore
+ */
+function filterStoreInfo(store) {
+    var filteredStore = {};
+    var props = ['id', 'countryCode', 'city', 'openingHoursEnglish',  'address', 'postalCode', 'name'];
+    props.forEach(function (prop) {
+            filteredStore[prop] = store[prop];
+    });
+    return filteredStore;
+}
+/**
  * Populate store finder html
  * @param {Object} target - Dom element that needs to be populated with store finder
  */
@@ -18,7 +31,8 @@ function loadStoreLocator(target) {
                     center: { lat: 55.666, lng: 12.57 },
                     zoom: 13,
                 });
-            }, 1000)
+            }, 1000);
+
             target.html(response.storesResultsHtml);
             storeLocator.search();
             storeLocator.changeRadius();
@@ -167,8 +181,10 @@ module.exports = {
                 }, 200);
             }
             var newLabel = $(data.storeDetailsHtml);
+            var storeInfo = encodeURIComponent(JSON.stringify(filterStoreInfo(data.storeInfo)));
             var content = $('<div class="selectedStore"></div>').append(newLabel)
                 .append('<input type="hidden" name="storeId" value="' + data.storeID + '" />')
+                .append('<input type="hidden" name="storeInfo" value="' + storeInfo + '" />')
                 .attr('data-store-info', JSON.stringify(data.storeInfo));
 
             pickupInStorePanel.empty().append(content);
@@ -251,16 +267,5 @@ module.exports = {
                 $(this).closest('.store-locator').find('.btn-storelocator-search').click();
             }
         }));
-    },
-    serializePDPFormData: function () {
-        // $('body').on('checkout:serializeShipping', function (e, data) {
-        //     console.log("checkout:serializeShipping");
-        //     // var $selectedStore = $('shipping-form .selectedStore');
-        //     // if ($selectedStore.length) {
-        //     //     var storeInfo = JSON.stringify($selectedStore.data('stroreInfo'));
-        //     //     data += '&storeInfo=' + storeInfo;
-        //     // }
-        //     data.callback(data);
-        // });
     }
 };

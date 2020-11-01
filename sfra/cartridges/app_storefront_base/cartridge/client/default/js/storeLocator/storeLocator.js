@@ -1,6 +1,5 @@
 /* globals google */
 'use strict';
-var scrollAnimate = require('base/components/scrollAnimate');
 
 /**
  * appends params to a url

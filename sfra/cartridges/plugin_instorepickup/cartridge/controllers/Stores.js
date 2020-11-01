@@ -22,9 +22,9 @@ function getStoreInfoFromPLI(basket, storeId) {
 server.get('GetStoreById', server.middleware.include, cache.applyDefaultCache, function (req, res, next) {
     // var StoreMgr = require('dw/catalog/StoreMgr');
     // var StoreModel = require('*/cartridge/models/store');
-    var storeId = req.querystring.storeId ? req.querystring.storeId : '';
     // var storeObject = StoreMgr.getStore(storeId);
     // var store = new StoreModel(storeObject);
+    var storeId = req.querystring.storeId ? req.querystring.storeId : '';
     var BasketMgr = require('dw/order/BasketMgr');
     var currentBasket = BasketMgr.getCurrentOrNewBasket();
     var storeInfo = getStoreInfoFromPLI(currentBasket, storeId);
@@ -112,10 +112,8 @@ server.replace('FindStores', function (req, res, next) {
     var products = buildProductListAsJson(req.querystring.products);
 
     var storesModel = storeHelpers.getStores(radius, postalCode, lat, long, req.geolocation, true, url, products);
-    ////////////////
     var ispuService = require('*/cartridge/scripts/services/ispu').ispuService;
     var responseObj;
-    var errorMessage;
     var postalCode = req.querystring.postalCode;
     if (postalCode) {
         var result = ispuService.call(postalCode);
@@ -127,7 +125,7 @@ server.replace('FindStores', function (req, res, next) {
             storesModel.stores = [];
         }
     }
-    ////////////////
+    
     if (products) {
         var context = {
             stores: storesModel.stores,
