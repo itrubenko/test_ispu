@@ -1,0 +1,5 @@
+<script>
+    function initMap() { 
+        console.log('GM initialized');
+    };
+</script>

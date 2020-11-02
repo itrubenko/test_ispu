@@ -1,0 +1,6 @@
+<isset name="isGMapApi" value="${dw.system.Site.getCurrent().getPreferences().custom.mapAPI}" scope="page" />
+
+<isif condition="${isGMapApi}">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=${isGMapApi}&callback=initMap&libraries=&v=weekly" defer></script>
+</isif>
