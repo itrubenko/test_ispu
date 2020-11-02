@@ -19,7 +19,7 @@ server.prepend('SubmitShipping', function (req, res, next) {
         shipment = currentBasket.defaultShipment;
     }
 
-    if (req.form.storeId) {
+    if (req.form.storeId && req.form.storeInfo) {
         collections.forEach(currentBasket.getAllProductLineItems(), function (productLineItem) {
             Transaction.wrap(function () {
                 if (productLineItem.custom.fromStoreId) {

@@ -1,7 +1,7 @@
 'use strict';
 
 var collections = require('*/cartridge/scripts/util/collections');
-var base = require('*/cartridge/scripts/helpers/basketValidationHelpers');
+var base = require('app_storefront_base/cartridge/scripts/helpers/basketValidationHelpers');
 
 /**
  * validates that the product line items exist, are online, and have available inventory.

@@ -1,6 +1,6 @@
 'use strict';
 
-var storeLocator = require('base/storeLocator/storeLocator');
+var storeLocator = require('base_ext/storeLocator/storeLocator');
 var ENTER_KEY = 13;
 
 /**

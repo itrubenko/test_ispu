@@ -25,13 +25,13 @@ module.exports = [{
     name: 'js',
     entry: jsFiles,
     output: {
-        path: path.resolve('./cartridges/app_storefront_base/cartridge/static'),
+        path: path.resolve('./cartridges/app_custom_site/cartridge/static'),
         filename: '[name].js'
     },
     resolve: {
         alias: {
             base: path.resolve(__dirname, 'cartridges/app_storefront_base/cartridge/client/default/js'),
-            base_ext: path.resolve(__dirname, 'cartridges/app_fisha_wallashops/cartridge/client/default/js'),
+            base_ext: path.resolve(__dirname, 'cartridges/app_custom_site/cartridge/client/default/js'),
             instorepickup: path.resolve(__dirname, 'cartridges/plugin_instorepickup/cartridge/client/default/js'),
         }
     },
