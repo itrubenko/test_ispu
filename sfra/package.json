@@ -110,7 +110,11 @@
     "last 2 versions",
     "ie >= 10"
   ],
-  "packageName": "app_storefront_base",
+  "packageName": "plugin_instorepickup",
+  "paths": {
+    "base": "../sfra/cartridges/app_storefront_base",
+    "instorepickup": "../sfra/cartridges/plugin_instorepickup"
+  },
   "babel": {
     "presets": [
       "env"

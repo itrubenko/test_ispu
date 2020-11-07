@@ -25,8 +25,14 @@ module.exports = [{
     name: 'js',
     entry: jsFiles,
     output: {
-        path: path.resolve('./cartridges/app_storefront_base/cartridge/static'),
+        path: path.resolve('./cartridges/plugin_instorepickup/cartridge/static'),
         filename: '[name].js'
+    },
+    resolve: {
+        alias: {
+            base: path.resolve(__dirname, 'cartridges/app_storefront_base/cartridge/client/default/js'),
+            instorepickup: path.resolve(__dirname, 'cartridges/plugin_instorepickup/cartridge/client/default/js'),
+        }
     },
     module: {
         rules: [
@@ -49,7 +55,7 @@ module.exports = [{
     name: 'scss',
     entry: scssFiles,
     output: {
-        path: path.resolve('./cartridges/app_storefront_base/cartridge/static'),
+        path: path.resolve('./cartridges/plugin_instorepickup/cartridge/static'),
         filename: '[name].css'
     },
     module: {
