@@ -1,4 +1,4 @@
-<isif condition="${shippingModel.shippingAddress || shippingModel.productLineItems.items[0].fromStoreId}">
+<isif condition="${shippingModel.shippingAddress || !empty(shippingModel.productLineItems.items[0].fromStoreId)}">
     <isif condition="${shippingModel.selectedShippingMethod.storePickupEnabled === true}">
         <h3>${Resource.msg('label.instore.pickup.from', 'instorePickup', null)}</h3>
     <iselse>

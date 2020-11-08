@@ -24,20 +24,20 @@ function validateProducts(basket) {
             return;
         }
 
-        if (Object.hasOwnProperty.call(item.custom, 'fromStoreId')
-            && item.custom.fromStoreId) {
-            var store = StoreMgr.getStore(item.custom.fromStoreId);
-            var storeInventory = ProductInventoryMgr.getInventoryList(store.custom.inventoryListId);
+        // if (Object.hasOwnProperty.call(item.custom, 'fromStoreId')
+        //     && item.custom.fromStoreId) {
+        //     var store = StoreMgr.getStore(item.custom.fromStoreId);
+        //     var storeInventory = ProductInventoryMgr.getInventoryList(store.custom.inventoryListId);
 
-            result.hasInventory = result.hasInventory
-                && (storeInventory.getRecord(item.productID)
-                && storeInventory.getRecord(item.productID).ATS.value >= item.quantityValue);
-        } else {
+        //     result.hasInventory = result.hasInventory
+        //         && (storeInventory.getRecord(item.productID)
+        //         && storeInventory.getRecord(item.productID).ATS.value >= item.quantityValue);
+        // } else {
             var availabilityLevels = item.product.availabilityModel
                 .getAvailabilityLevels(item.quantityValue);
             result.hasInventory = result.hasInventory
                 && (availabilityLevels.notAvailable.value === 0);
-        }
+        // }
     });
 
     return result;

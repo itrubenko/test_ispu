@@ -10,6 +10,7 @@
         <!--<![endif]-->
         <isinclude template="/common/htmlHead" />
         <isactivedatahead/>
+        <isinclude template="include/pickupAPIheader" />
     </head>
     <body>
         ${dw.system.HookMgr.callHook('app.template.beforeHeader', 'beforeHeader', pdict) || ''}

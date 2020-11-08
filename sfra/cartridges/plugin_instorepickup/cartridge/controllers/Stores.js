@@ -34,33 +34,32 @@ function buildProductListAsJson(products) {
 server.get('InventorySearch', cache.applyDefaultCache, function (req, res, next) {
     var renderTemplateHelper = require('*/cartridge/scripts/renderTemplateHelper');
     var URLUtils = require('dw/web/URLUtils');
+    var ProductMgr = require('dw/catalog/ProductMgr');
+    var BasketMgr = require('dw/order/BasketMgr');
 
-    var radius = req.querystring.radius;
-    var postalCode = req.querystring.postalCode;
-    var lat = req.querystring.lat;
-    var long = req.querystring.long;
-    var showMap = req.querystring.showMap || false;
-    var horizontalView = req.querystring.horizontalView || false;
-    var isForm = req.querystring.isForm || false;
+    var currentBasket = BasketMgr.currentBasket;
+    var shipmentUUID = req.querystring.uuid;
+    var shipments = currentBasket.getShipments().iterator();
 
-    var products = buildProductListAsJson(req.querystring.products);
-
-    var url = URLUtils.url('Stores-FindStores', 'showMap', showMap, 'products', req.querystring.products).toString();
-    var storesModel = storeHelpers.getStores(radius, postalCode, lat, long, req.geolocation, showMap, url, products);
+    var storeInfo = {};
+    while (shipments.hasNext()) {
+        var shipment = shipments.next();
+        if ((shipment.UUID === shipmentUUID) && shipment.custom.fromStoreId) {
+            storeInfo = JSON.parse(shipment.custom.fromStoreId);
+        }
+    }
 
     var viewData = {
-        stores: storesModel,
-        horizontalView: horizontalView,
-        isForm: isForm,
-        showMap: showMap
+        store: storeInfo
     };
-
-    var storesResultsHtml = storesModel.stores
-        ? renderTemplateHelper.getRenderedHtml(viewData, 'storeLocator/storeLocatorNoDecorator')
+    var storesResultsHtml = true
+        ? renderTemplateHelper.getRenderedHtml({ store: storeInfo }, 'storeLocator/storeLocatorNoDecorator')
         : null;
 
-    storesModel.storesResultsHtml = storesResultsHtml;
-    res.json(storesModel);
+    viewData.storesResultsHtml = storesResultsHtml;
+    res.json(viewData);
+    // res.render('storeLocator/storeLocatorNoDecorator', viewData);
+
     next();
 });
 

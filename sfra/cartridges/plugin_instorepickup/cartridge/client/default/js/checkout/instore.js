@@ -243,5 +243,57 @@ module.exports = {
                 $(this).closest('.store-locator').find('.btn-storelocator-search').click();
             }
         }));
+    },
+    handlePickupClicks: function() {
+        document.body.addEventListener('pickups-after-choosen', function(e) {
+            var pointDetails = e.originalEvent ? e.originalEvent.detail : e.detail;
+            var $selectedPickupOnCheckout =  $('.js-ups-pickup-store-selector[data-selected=true]');
+            var $pickupBlock = $selectedPickupOnCheckout.parents('.js-pickup-in-store');
+            var $storeResult = $pickupBlock.find('.js-store-result');
+            // js-store-result
+            console.log(pointDetails);
+
+            var reqObj = {
+                pickup_code: pointDetails.iid,
+                pickup_type: 'store',
+                pickup_name: pointDetails.title,
+                pickup_city: pointDetails.city,
+                pickup_address: pointDetails.street,
+                pickup_description: pointDetails.title
+            };
+
+            Object.keys(reqObj).forEach(function(prop) {
+                $storeResult.find(`.${prop}`).html(reqObj[prop]);
+            });
+
+
+
+            $pickupBlock.find('[name="storeId"]').remove();
+            $pickupBlock
+                .find('.js-store-result')
+                .append('<input type="hidden" name="storeId" value="' + encodeURIComponent(JSON.stringify(reqObj)) + '" />')
+
+
+            // Clean all previously selected pickups
+            $('.js-ups-pickup-store-selector').attr('data-selected', false);
+            $selectedPickupOnCheckout.html('Select new store +');
+        });
+
+        document.body.addEventListener('pickups-before-open', function () {
+            var defLocation = {};
+            defLocation.location = {};
+
+            defLocation.location.lat = 31.2810188;
+            defLocation.location.lng = 34.8047226;
+
+            var json = JSON.stringify(defLocation);
+            window.PickupsSDK.setDefaults(json);
+        });
+
+        $(document).on('click', '.js-ups-pickup-store-selector', function(e) {
+            // e.preventDefault();
+            var $target = $(e.target);
+            $target.attr('data-selected', true);
+        });
     }
 };

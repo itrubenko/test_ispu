@@ -3,9 +3,7 @@
     <address>
         <a class="store-map" target='_blank' href="https://maps.google.com/?daddr=${store.latitude},${store.longitude}">
             ${store.address1}
-            <isif condition="${store.address2}">
-                ${store.address2}
-            </isif>
+
             <isif condition="${store.city}">
                 ${store.city},
             </isif>

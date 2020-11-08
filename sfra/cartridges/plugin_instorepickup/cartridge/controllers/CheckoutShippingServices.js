@@ -32,6 +32,7 @@ server.append('SubmitShipping', function (req, res, next) {
     var Resource = require('dw/web/Resource');
     var Transaction = require('dw/system/Transaction');
     var ShippingHelper = require('*/cartridge/scripts/checkout/shippingHelpers');
+    var Encoding = require('dw/crypto/Encoding');
 
     var currentBasket = BasketMgr.getCurrentBasket();
     var shipmentUUID = req.querystring.shipmentUUID || req.form.shipmentUUID;
@@ -55,7 +56,8 @@ server.append('SubmitShipping', function (req, res, next) {
             delete viewData.fieldErrors;
             viewData.error = false;
             viewData.shipmentUUID = req.form.shipmentUUID;
-            viewData.storeId = req.form.storeId;
+            // viewData.storeId = req.form.storeId;
+            viewData.storeId = Encoding.fromURI(req.form.storeId);
             viewData.shippingMethod = shipment.shippingMethodID;
 
             res.setViewData(viewData);
@@ -70,26 +72,26 @@ server.append('SubmitShipping', function (req, res, next) {
 
                 var viewData = res.getViewData();
 
-                var storeId = viewData.storeId;
-                var store = StoreMgr.getStore(storeId);
+                var store = JSON.parse(viewData.storeId);
+                var storeId = store.pickup_code;
                 var viewDataShipmentUUID = viewData.shipmentUUID;
                 var viewDataShipment = viewDataShipmentUUID ? ShippingHelper.getShipmentByUUID(currentBasket, viewDataShipmentUUID) : currentBasket.defaultShipment;
 
                 if (storeId) {
-                    ShippingHelper.markShipmentForPickup(viewDataShipment, storeId);
+                    ShippingHelper.markShipmentForPickup(viewDataShipment, viewData.storeId);
 
                     Transaction.wrap(function () {
                         var storeAddress = {
                             address: {
-                                firstName: store.name,
+                                firstName: store.pickup_name,
                                 lastName: '',
-                                address1: store.address1,
-                                address2: store.address2,
-                                city: store.city,
-                                stateCode: store.stateCode,
-                                postalCode: store.postalCode,
-                                countryCode: store.countryCode.value,
-                                phone: store.phone
+                                address1: store.pickup_description,
+                                address2: '',
+                                city: store.pickup_city,
+                                stateCode: '',
+                                postalCode: store.pickup_code ,
+                                countryCode: '',
+                                phone: ''
                             },
                             shippingMethod: viewData.shippingMethod
                         };
