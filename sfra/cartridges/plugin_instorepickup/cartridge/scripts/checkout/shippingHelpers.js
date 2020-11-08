@@ -44,18 +44,18 @@ function getApplicableShippingMethods(shipment, address) {
  * @param {string} storeId - Id of the store for shipment to be picked up from.
  */
 function markShipmentForPickup(shipment, storeId) {
-    var StoreMgr = require('dw/catalog/StoreMgr');
-    var ProductInventoryMgr = require('dw/catalog/ProductInventoryMgr');
+    // var StoreMgr = require('dw/catalog/StoreMgr');
+    // var ProductInventoryMgr = require('dw/catalog/ProductInventoryMgr');
     var Transaction = require('dw/system/Transaction');
 
-    var store = StoreMgr.getStore(storeId);
-    var storeInventory = ProductInventoryMgr.getInventoryList(
-        store.custom.inventoryListId
-    );
+    // // var store = StoreMgr.getStore(storeId);
+    // var storeInventory = ProductInventoryMgr.getInventoryList(
+    //     store.custom.inventoryListId
+    // );
     Transaction.wrap(function () {
         collections.forEach(shipment.productLineItems, function (lineItem) {
             lineItem.custom.fromStoreId = storeId; // eslint-disable-line no-param-reassign
-            lineItem.setProductInventoryList(storeInventory);
+            // lineItem.setProductInventoryList(storeInventory);
         });
         shipment.custom.fromStoreId = storeId; // eslint-disable-line no-param-reassign
     });

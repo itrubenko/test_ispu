@@ -19,7 +19,7 @@ function ShippingModel(shipment) {
         var productItem = item.product ? item.product.ID : item.productID;
         return productItem + ':' + item.quantity.value;
     }).join(',');
-    this.pickupInstoreUrl = URLUtils.url('Stores-InventorySearch', 'showMap', false, 'products', products, 'isForm', false).toString();
+    this.pickupInstoreUrl = URLUtils.url('Stores-InventorySearch','uuid', shipment.UUID).toString();
 }
 
 module.exports = ShippingModel;

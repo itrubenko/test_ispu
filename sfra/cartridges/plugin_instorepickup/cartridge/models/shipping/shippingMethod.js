@@ -13,6 +13,8 @@ function ShippingMethodModel(shippingMethod, shipment) {
     base.call(this, shippingMethod, shipment);
     this.storePickupEnabled = shippingMethod.custom
         && shippingMethod.custom.storePickupEnabled ? shippingMethod.custom.storePickupEnabled : false;
+
+    this.fromStoreId = shipment.custom.fromStoreId ? JSON.parse(shipment.custom.fromStoreId) : null;
 }
 
 module.exports = ShippingMethodModel;

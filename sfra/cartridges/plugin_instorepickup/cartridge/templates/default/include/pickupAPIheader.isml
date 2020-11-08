@@ -1,0 +1,8 @@
+<script>
+    (function () {
+        var pkp = document.createElement('script');
+        pkp.type = 'text/javascript'; pkp.async = true;
+        pkp.src = 'https://pickuppoint.co.il/api/ups-pickups.sdk.all.js';
+        document.getElementsByTagName('head')[0].appendChild(pkp);
+    })();
+</script>

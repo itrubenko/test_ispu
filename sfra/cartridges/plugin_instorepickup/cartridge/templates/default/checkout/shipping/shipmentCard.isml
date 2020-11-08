@@ -24,9 +24,9 @@
                 <isinclude template="checkout/shipping/shipmentSelector" />
             </fieldset>
 
-            <fieldset class="pickup-in-store" data-url="${shippingModel.pickupInstoreUrl}">
-                <isif condition="${shippingModel.productLineItems.items[0].fromStoreId}">
-                    <isinclude url="${URLUtils.url('Stores-GetStoreById', 'storeId', shippingModel.productLineItems.items[0].fromStoreId)}"/>
+            <fieldset class="pickup-in-store js-pickup-in-store" data-url="${shippingModel.pickupInstoreUrl}">
+                <isif condition="${!emtpty(shippingModel.productLineItems.items[0].fromStoreId)}">
+                    <isinclude url="${URLUtils.url('Stores-InventorySearch', 'uuid', shippingModel.UUID)}"/>
                 </isif>
             </fieldset>
 

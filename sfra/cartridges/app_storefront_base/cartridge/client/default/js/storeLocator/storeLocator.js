@@ -242,23 +242,51 @@ module.exports = {
         });
     },
     selectStore: function () {
-        $('.store-locator-container').on('click', '.select-store', (function (e) {
-            e.preventDefault();
-            var selectedStore = $(':checked', '.results-card .results');
-            var data = {
-                storeID: selectedStore.val(),
-                searchRadius: $('#radius').val(),
-                searchPostalCode: $('.results').data('search-key').postalCode,
-                storeDetailsHtml: selectedStore.siblings('label').find('.store-details').html(),
-                event: e
-            };
+        $('.store-locator-container').on('click', '.select-store', (function (e, data) {
+            // e.preventDefault();
+            // var selectedStore = $(':checked', '.results-card .results');
+            // var data = {
+            //     storeID: selectedStore.val(),
+            //     searchRadius: $('#radius').val(),
+            //     searchPostalCode: $('.results').data('search-key').postalCode,
+            //     storeDetailsHtml: selectedStore.siblings('label').find('.store-details').html(),
+            //     event: e
+            // };
 
-            $('body').trigger('store:selected', data);
+            // $('body').trigger('store:selected', data);
         }));
     },
     updateSelectStoreButton: function () {
         $('body').on('change', '.select-store-input', (function () {
             $('.select-store').prop('disabled', false);
         }));
+    },
+    handlePickupClicks: function() {
+        document.body.addEventListener('pickups-after-choosen', function(e) {
+            var pointDetails = e.originalEvent ? e.originalEvent.detail : e.detail;
+            console.log(pointDetails);
+
+            var reqObj = {
+                pickup_code: pointDetails.iid,
+                pickup_type: 'store',
+                pickup_name: pointDetails.title,
+                pickup_city: pointDetails.city,
+                pickup_address: pointDetails.street,
+                pickup_description: pointDetails.title
+            };
+
+
+        });
+
+        document.body.addEventListener('pickups-before-open', function () {
+            var defLocation = {};
+            defLocation.location = {};
+
+            defLocation.location.lat = 31.2810188;
+            defLocation.location.lng = 34.8047226;
+
+            var json = JSON.stringify(defLocation);
+            window.PickupsSDK.setDefaults(json);
+        });
     }
 };

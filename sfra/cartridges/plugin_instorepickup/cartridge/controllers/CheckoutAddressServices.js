@@ -18,19 +18,22 @@ server.append('AddNewAddress', function (req, res, next) {
         delete viewData.form;
         delete viewData.serverErrors;
     }
+    var Encoding = require('dw/crypto/Encoding');
+    viewData.storeId = Encoding.fromURI(req.form.storeId);
+    var store = JSON.parse(Encoding.fromURI(req.form.storeId));
 
     if (storeId) {
-        var store = StoreMgr.getStore(storeId);
+        // var store = StoreMgr.getStore(storeId);
         viewData.address = {
-            firstName: store.name,
+            firstName: store.pickup_name,
             lastName: '',
-            address1: store.address1,
-            address2: store.address2,
-            city: store.city,
-            stateCode: store.stateCode,
-            postalCode: store.postalCode,
-            countryCode: store.countryCode,
-            phone: store.phone
+            address1: store.pickup_description,
+            address2: '',
+            city: store.pickup_city,
+            stateCode: '',
+            postalCode: store.pickup_code ,
+            countryCode: '',
+            phone: ''
         };
     }
 
@@ -53,7 +56,7 @@ server.append('AddNewAddress', function (req, res, next) {
 
         if (shipment) {
             if (req.form.storeId) {
-                ShippingHelper.markShipmentForPickup(shipment, req.form.storeId);
+                ShippingHelper.markShipmentForPickup(shipment, viewData.storeId);
             } else {
                 ShippingHelper.markShipmentForShipping(shipment);
             }

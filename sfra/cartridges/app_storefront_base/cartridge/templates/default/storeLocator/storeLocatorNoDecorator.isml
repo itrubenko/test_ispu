@@ -1,12 +1,24 @@
-<div class="container store-locator-container">
+<div class="container store-locator-container js-pickup-in-store">
     <div class="row">
-        <div class="${pdict.horizontalView === 'true' ? 'col-sm-6 d-flex align-items-start flex-column' : 'col-sm-12'}">
+            <div class="store-result js-store-result">
+                <div class="pickup_name">${pdict.store.pickup_name ? pdict.store.pickup_name : ''}</div>
+                <div class="pickup_city">${pdict.store.pickup_city ? pdict.store.pickup_city : ''}</div>
+                <div class="pickup_address">${pdict.store.pickup_address ? pdict.store.pickup_address : ''}</div>
+                <div class="pickup_description">${pdict.store.pickup_description ? pdict.store.pickup_description : ''}</div>
+            </div>
+            <div onclick="window.PickupsSDK.onClick();return;" class="js-ups-pickup-store-selector" data-selected="false">
+                ${empty(pdict.store) ? 'Select store' : 'Select new store +'}
+            </div>
+
+        <input type="hidden" name="storeId" value="${encodeURIComponent(JSON.stringify(pdict.store))}" />
+
+        <iscomment> <div class="${pdict.horizontalView === 'true' ? 'col-sm-6 d-flex align-items-start flex-column' : 'col-sm-12'}">
             <div class="card search-form">
                 <isinclude template="storeLocator/storeLocatorFields" />
             </div>
-        </div>
+        </div> </iscomment>
 
-        <div class="${pdict.horizontalView === 'true' ? 'col-sm-6' : 'col-sm-12'}">
+        <iscomment> <div class="${pdict.horizontalView === 'true' ? 'col-sm-6' : 'col-sm-12'}">
             <div class="card results-card">
                 <div class="card-header">
                     <isinclude template="storeLocator/storeLocatorRadius" />
@@ -19,13 +31,13 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> </iscomment>
     </div>
-    <isif condition="${pdict.showMap === false || pdict.showMap === 'false'}">
+    <iscomment> <isif condition="${pdict.showMap === false || pdict.showMap === 'false'}">
         <div class="row">
             <div class="${pdict.horizontalView === 'true' ? 'col-sm-6' : 'col-sm-12'}">
                 <button class="btn btn-primary btn-block select-store" disabled>${Resource.msg('button.select.store','storeLocator',null)}</button>
             </div>
         </div>
-    </isif>
+    </isif> </iscomment>
 </div>
